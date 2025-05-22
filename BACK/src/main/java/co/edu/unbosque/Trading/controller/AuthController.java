@@ -59,20 +59,40 @@ public class AuthController {
         return ResponseEntity.ok(user);
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody User newUser) {
+    @PostMapping("/register/investor")
+    public ResponseEntity<?> registerInvestor(@RequestBody Investor investor) {
         try {
-            String message = authService.register(newUser);
-            if (message.equals("Usuario registrado exitosamente")) {
-                return ResponseEntity.ok(Map.of("message", message));
-            } else {
-                return ResponseEntity.badRequest().body(Map.of("message", message));
-            }
+            String message = authService.registerInvestor(investor);
+            return ResponseEntity.ok(Map.of("message", message));
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(
-                    Map.of("message", "Error interno al registrar el usuario", "error", e.getMessage())
+                    Map.of("message", "Error al registrar el inversionista", "error", e.getMessage())
             );
         }
     }
+
+    @PostMapping("/register/commission")
+    public ResponseEntity<?> registerCommission(@RequestBody Commission commission) {
+        try {
+            String message = authService.registerCommission(commission);
+            return ResponseEntity.ok(Map.of("message", message));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(
+                    Map.of("message", "Error al registrar el inversionista", "error", e.getMessage())
+            );
+        }
+    }
+
+//    @PostMapping("/register/admin")
+//    public ResponseEntity<?> registerAdmin(@RequestBody Investor investor) {
+//        try {
+//            String message = authService.registerInvestor(investor);
+//            return ResponseEntity.ok(Map.of("message", message));
+//        } catch (Exception e) {
+//            return ResponseEntity.internalServerError().body(
+//                    Map.of("message", "Error al registrar el inversionista", "error", e.getMessage())
+//            );
+//        }
+//    }
 
 }

@@ -12,6 +12,8 @@ import PortfolioPage from './page/PortfolioPage'
 import { UserProvider } from './page/Navbar/UserContext'
 import Navbar from './page/Navbar/Navbar'
 import Sidebar from './page/Navbar/Sidebar'
+import InvestorsPage from './page/InvestorPage'
+import ChooseCommissionPage from './page/ChooseCommissionPage'
 
 
 function App() {
@@ -29,6 +31,8 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/payment-details" element={<PaymentDetails />} />
           <Route path="/portfolio" element={<PortfolioPage />} />
+          <Route path="/commission/investors" element={<InvestorsPage />} />
+          <Route path="/choose-commission" element={<ChooseCommissionPage />} />
         </Routes>
       </UserProvider>
     </BrowserRouter>

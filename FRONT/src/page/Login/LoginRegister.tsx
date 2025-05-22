@@ -146,16 +146,30 @@ const LoginRegister = () => {
 
     const handleRegister = async () => {
         const isValid = validateForm();
-        console.log('Formulario válido:', isValid); // Debug
-
         if (!isValid) {
             toast.error('Por favor corrija los errores en el formulario');
             return;
         }
 
+        // Elegir el endpoint según el rol
+        let registerUrl = '';
+        switch (registerData.role) {
+            case 'INVESTOR':
+                registerUrl = 'http://localhost:8080/api/register/investor';
+                break;
+            case 'COMMISSION':
+                registerUrl = 'http://localhost:8080/api/register/commission';
+                break;
+            case 'ADMIN':
+                registerUrl = 'http://localhost:8080/api/register/admin';
+                break;
+            default:
+                toast.error('Rol inválido');
+                return;
+        }
+
         try {
-            console.log('Enviando datos:', registerData); // Debug
-            const res = await fetch('http://localhost:8080/api/register', {
+            const res = await fetch(registerUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(registerData),
@@ -163,7 +177,7 @@ const LoginRegister = () => {
 
             if (!res.ok) {
                 const errorData = await res.json();
-                console.error('Error del servidor:', errorData); // Debug
+                console.error('Error del servidor:', errorData);
                 toast.error(errorData.message || 'Error al registrar');
                 return;
             }
@@ -171,13 +185,14 @@ const LoginRegister = () => {
             const result = await res.json();
             toast.success('Usuario registrado correctamente');
             setActiveTab('login');
-            // Reset form
+
+            // Limpiar formulario
             setRegisterData({
                 username: '', password: '', role: '', name: '', lastName: '',
                 cedula: '', email: '', phoneNumber: ''
             });
         } catch (err) {
-            console.error('Error de red:', err); // Debug
+            console.error('Error de red:', err);
             toast.error('Error en la conexión con el servidor');
         }
     };
@@ -231,7 +246,7 @@ const LoginRegister = () => {
                                         value={loginData.password}
                                         onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
                                     />
-                                </div>  
+                                </div>
                             </CardContent>
                             <CardFooter className="flex justify-between items-center">
                                 <Button variant="link" className="underline text-sm text-blue-900 hover:text-blue-950">
@@ -321,18 +336,23 @@ const LoginRegister = () => {
                                 <div className="space-y-1">
                                     <Label htmlFor="role">Rol</Label>
                                     <Select
+                                        value={registerData.role}
                                         onValueChange={(value) => setRegisterData({ ...registerData, role: value })}
                                     >
-                                        <SelectTrigger className="w-full" id="role">
-                                            <SelectValue placeholder="Seleccionar" />
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Seleccione un rol" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="ADMIN">Administrador</SelectItem>
-                                            <SelectItem value="INVESTOR">Inversionista</SelectItem>
+                                            <SelectItem value="INVESTOR">Inversor</SelectItem>
                                             <SelectItem value="COMMISSION">Comisionista</SelectItem>
+                                            <SelectItem value="ADMIN">Administrador</SelectItem>
                                         </SelectContent>
                                     </Select>
+                                    {registerErrors.role && (
+                                        <p className="text-red-500 text-sm">{registerErrors.role}</p>
+                                    )}
                                 </div>
+
                             </CardContent>
                             <CardFooter className="flex justify-end">
                                 <Button className="bg-blue-900 hover:bg-blue-950 text-white" onClick={handleRegister}>

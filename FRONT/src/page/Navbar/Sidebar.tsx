@@ -115,7 +115,7 @@ const InvestorSidebar = () => {
   const investorMenu = [
     { name: "Home", path: "/home", icon: <HomeIcon className='h-5 w-5' /> },
     { name: "Portafolio", path: "/portfolio", icon: <LayoutDashboardIcon className='h-5 w-5' /> },
-    { name: "Lista de deseo", path: "/watchlist", icon: <BookmarkIcon className='h-5 w-5' /> },
+    { name: "Comisionista", path: "/choose-commission", icon: <BookmarkIcon className='h-5 w-5' /> },
     { name: "Billetera", path: "/wallet", icon: <WalletIcon className='h-5 w-5' /> },
     { name: "Detalle de pago", path: "/payment-details", icon: <LandmarkIcon className='h-5 w-5' /> },
     { name: "Retiro", path: "/withdrawal", icon: <CreditCardIcon className='h-5 w-5' /> },

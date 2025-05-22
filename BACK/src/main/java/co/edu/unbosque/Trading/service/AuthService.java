@@ -1,10 +1,7 @@
 package co.edu.unbosque.Trading.service;
 
-import co.edu.unbosque.Trading.model.AlpacaAccountRequest;
-import co.edu.unbosque.Trading.model.AlpacaAccountResponse;
-import co.edu.unbosque.Trading.model.User;
-import co.edu.unbosque.Trading.repository.AlpacaAccountRepository;
-import co.edu.unbosque.Trading.repository.UserRepository;
+import co.edu.unbosque.Trading.model.*;
+import co.edu.unbosque.Trading.repository.*;
 import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,41 +17,119 @@ public class AuthService {
     private final AlpacaAccountRepository alpacaAccountRepository;
     private final AlpacaAccountService alpacaAccountService;
     private final UserRepository userRepository;
+    private final InvestorRepository investorRepository;
+//    private final AdminRepository adminRepository;
+    private final CommissionRepository commissionRepository;
     private final PasswordEncoder passwordEncoder;
 
     public AuthService(
             AlpacaAccountRepository alpacaAccountRepository,
             UserRepository userRepository,
             PasswordEncoder passwordEncoder,
-            AlpacaAccountService alpacaAccountService) {
+            AlpacaAccountService alpacaAccountService,
+            InvestorRepository investorRepository,
+//            AdminRepository adminRepository,
+            CommissionRepository commissionRepository) {
         this.userRepository = userRepository;
+        this.investorRepository = investorRepository;
+//        this.adminRepository = adminRepository;
+        this.commissionRepository = commissionRepository;
         this.passwordEncoder = passwordEncoder;
         this.alpacaAccountService = alpacaAccountService;
         this.alpacaAccountRepository = alpacaAccountRepository;
     }
 
+    public List<Commission> findCommissions() {
+        return commissionRepository.findAll(); // Asume que usas JPA
+    }
+
+    public List<Investor> findInvestorsByCommissionId(Long commissionId) {
+        return investorRepository.findByCommissionId(commissionId); // Asume que tienes este método en el repositorio
+    }
+
     @Transactional
-    public String register(User newUser) {
-        if (userRepository.existsByUsername(newUser.getUsername())) {
+    public String registerInvestor(Investor investor) {
+        if (investorRepository.existsByUsername(investor.getUsername())) {
             return "El usuario ya existe";
         }
+        investor.setPassword(passwordEncoder.encode(investor.getPassword()));
+        Investor savedInvestor = investorRepository.save(investor);
 
-        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
-        User savedUser = userRepository.save(newUser);
-
-        AlpacaAccountRequest request = mapUserToAlpacaAccountRequest(newUser);
+        AlpacaAccountRequest request = mapUserToAlpacaAccountRequest(investor);
         try {
             AlpacaAccountResponse response = alpacaAccountService.createAccount(request);
             AlpacaAccountResponse savedAccount = alpacaAccountRepository.save(response);
 
-            savedUser.setAlpacaAccount(savedAccount);
-            userRepository.save(savedUser);
+            savedInvestor.setAlpacaAccount(savedAccount);
+            investorRepository.save(savedInvestor);
 
-            System.out.println("Cuenta Alpaca creada: " + response);
             return "Usuario registrado exitosamente";
         } catch (Exception e) {
-            userRepository.delete(savedUser);
-            System.err.println("Error creando cuenta en Alpaca: " + e.getMessage());
+            investorRepository.delete(savedInvestor);
+            return "Error al registrar usuario - no se pudo crear la cuenta Alpaca";
+        }
+    }
+
+    public String assignCommissionToInvestor(Long investorId, Long commissionId) {
+        Investor investor = investorRepository.findById(investorId)
+                .orElseThrow(() -> new IllegalArgumentException("Inversor no encontrado"));
+
+        Commission agent = commissionRepository.findById(commissionId)
+                .orElseThrow(() -> new IllegalArgumentException("Comisionista no encontrado"));
+
+        investor.setCommission(agent);
+        investorRepository.save(investor);
+
+        return "Comisionista asignado correctamente al inversor " + investorId;
+    }
+
+
+//    @Transactional
+//    public String registerAdmin(Admin admin) {
+//        if (adminRepository.existsByUsername(admin.getUsername())) {
+//            return "El usuario ya existe";
+//        }
+//
+//        admin.setPassword(passwordEncoder.encode(admin.getPassword()));
+//
+//        Admin savedAdmin = adminRepository.save(admin);
+//
+//        AlpacaAccountRequest request = mapUserToAlpacaAccountRequest(admin);
+//        try {
+//            AlpacaAccountResponse response = alpacaAccountService.createAccount(request);
+//            AlpacaAccountResponse savedAccount = alpacaAccountRepository.save(response);
+//
+//            savedAdmin.setAlpacaAccount(savedAccount);
+//            adminRepository.save(savedAdmin);
+//
+//            return "Usuario registrado exitosamente";
+//        } catch (Exception e) {
+//            adminRepository.delete(savedAdmin);
+//            return "Error al registrar usuario - no se pudo crear la cuenta Alpaca";
+//        }
+//    }
+
+    @Transactional
+    public String registerCommission(Commission commission) {
+        if (commissionRepository.existsByUsername(commission.getUsername())) {
+            return "El usuario ya existe";
+        }
+
+        commission.setPassword(passwordEncoder.encode(commission.getPassword()));
+
+        Commission savedcommission = commissionRepository.save(commission);
+
+        AlpacaAccountRequest request = mapUserToAlpacaAccountRequest(commission);
+        try {
+            AlpacaAccountResponse response = alpacaAccountService.createAccount(request);
+            AlpacaAccountResponse savedAccount = alpacaAccountRepository.save(response);
+
+            savedcommission.setAlpacaAccount(savedAccount);
+            commissionRepository.save(savedcommission);
+
+            return "Usuario registrado exitosamente";
+        } catch (Exception e) {
+            commissionRepository.delete(savedcommission);
             return "Error al registrar usuario - no se pudo crear la cuenta Alpaca";
         }
     }
