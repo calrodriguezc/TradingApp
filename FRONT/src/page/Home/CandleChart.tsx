@@ -74,20 +74,19 @@ const CandleChart = ({ symbol }: { symbol: string }) => {
     plotOptions: {
       candlestick: {
         colors: {
-          upward: '#16C784',   // verde para subida
-          downward: '#EF4444'  // rojo para bajada
+          upward: '#16C784',
+          downward: '#EF4444'
         }
       }
     }
   });
 
-  // Cargar datos con cookies
   useEffect(() => {
     const fetchBarsData = async () => {
       try {
         const response = await fetch(`http://localhost:8080/alpaca/bars/${symbol}`, {
           method: 'GET',
-          credentials: 'include', // necesario para cookies
+          credentials: 'include',
           headers: {
             'Content-Type': 'application/json'
           }
@@ -113,7 +112,6 @@ const CandleChart = ({ symbol }: { symbol: string }) => {
     fetchBarsData();
   }, [symbol]);
 
-  // Actualizar el título del gráfico
   useEffect(() => {
     setChartOptions((prevOptions) => ({
       ...prevOptions,

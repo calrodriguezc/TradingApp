@@ -38,11 +38,8 @@ public class TransferService {
             ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
 
             if (response.getStatusCode().is2xxSuccessful()) {
-                // Convertir el JSON de la respuesta a la entidad Transfer
                 ObjectMapper mapper = new ObjectMapper();
                 Transfer transfer = mapper.readValue(response.getBody(), Transfer.class);
-
-                // Guardar en la base de datos
                 transferRepository.save(transfer);
             }
 

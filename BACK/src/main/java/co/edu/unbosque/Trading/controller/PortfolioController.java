@@ -1,7 +1,7 @@
 package co.edu.unbosque.Trading.controller;
 
 import co.edu.unbosque.Trading.model.*;
-import co.edu.unbosque.Trading.service.AchRelationshipService;
+import co.edu.unbosque.Trading.service.PortfolioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -11,15 +11,15 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/ach")
-public class AchRelationshipController {
+public class PortfolioController {
 
     @Autowired
-    private AchRelationshipService achRelationshipService;
+    private PortfolioService portfolioService;
 
     @GetMapping("/account-balance/{accountId}")
     public ResponseEntity<?> getAccountBalance(@PathVariable String accountId) {
         try {
-            AccountBalanceDTO balance = achRelationshipService.getAccountBalance(accountId);
+            AccountBalanceDTO balance = portfolioService.getAccountBalance(accountId);
             return ResponseEntity.ok(balance);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error al obtener el balance: " + e.getMessage());
@@ -29,18 +29,17 @@ public class AchRelationshipController {
     @GetMapping("/orders/{accountId}")
     public ResponseEntity<?> getOrders(@PathVariable String accountId) {
         try {
-            List<OrdersDTO> orders = achRelationshipService.getOrders(accountId);
+            List<OrdersDTO> orders = portfolioService.getOrders(accountId);
             return ResponseEntity.ok(orders);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
     }
 
-
     @GetMapping("/portfolio/{accountId}")
     public ResponseEntity<?> getPortfolio(@PathVariable String accountId) {
         try {
-            List<PositionDTO> positions = achRelationshipService.getPortfolio(accountId);
+            List<PositionDTO> positions = portfolioService.getPortfolio(accountId);
             return ResponseEntity.ok(positions);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
@@ -53,9 +52,8 @@ public class AchRelationshipController {
             @RequestBody OrderDTO request
     ) {
         try {
-            // Validar que el request contenga los parámetros necesarios según el tipo de orden
             validateOrderRequest(request);
-            achRelationshipService.createOrder(accountId, request);
+            portfolioService.createOrder(accountId, request);
             return ResponseEntity.ok("Orden realizada con éxito.");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
@@ -63,7 +61,6 @@ public class AchRelationshipController {
     }
 
     private void validateOrderRequest(OrderDTO request) throws Exception {
-        // Validar que la orden tenga los parámetros requeridos según el tipo
         if ("market".equalsIgnoreCase(request.getType()) || "limit".equalsIgnoreCase(request.getType())) {
             if (request.getQty() == null && request.getNotional() == null) {
                 throw new Exception("Para una orden de tipo 'market' o 'limit', debes proporcionar 'qty' o 'notional'.");
@@ -81,19 +78,6 @@ public class AchRelationshipController {
         }
     }
 
-//    @PostMapping("/transfer/{accountId}")
-//    public ResponseEntity<String> depositFunds(
-//            @PathVariable String accountId,
-//            @RequestBody TransferDTO request
-//    ) {
-//        try {
-//            achRelationshipService.depositFunds(accountId, request);
-//            return ResponseEntity.ok("Transferencia realizada con éxito.");
-//        } catch (Exception e) {
-//            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
-//        }
-//    }
-
     @PostMapping("/{accountId}")
     public ResponseEntity<String> createAchRelationship(
             @PathVariable String accountId,
@@ -102,7 +86,7 @@ public class AchRelationshipController {
     ) {
         try {
             User user = (User) authentication.getPrincipal();
-            String achId = achRelationshipService.createAchRelationship(accountId, request, user);
+            String achId = portfolioService.createAchRelationship(accountId, request, user);
             return ResponseEntity.ok(achId);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());

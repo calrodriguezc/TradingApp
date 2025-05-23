@@ -17,9 +17,13 @@ public class AchRelationship {
 
     @Id
     private String achRelationshipId;
+
     private String bankAccountType;
+
     private String accountOwnerName;
+
     private String bankAccountNumber;
+
     private String bankRoutingNumber;
 
     @OneToOne(mappedBy = "achRelationship")

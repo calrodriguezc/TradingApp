@@ -1,25 +1,36 @@
 package co.edu.unbosque.Trading.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
-@Table(name = "commissions")
+@Table(name = "commision")
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Data
-public class Commission extends User {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class Commission {
 
+    @Id
+    private String id;
+
+    private Double amount;
+
+    private String currency;
+
+    private String description;
+
+    private String calculatedAt;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id")
     @JsonIgnore
-    @OneToMany(mappedBy = "commission", cascade = CascadeType.ALL)
-    private List<Investor> investors = new ArrayList<>();
+    private Orders order;
 
 }

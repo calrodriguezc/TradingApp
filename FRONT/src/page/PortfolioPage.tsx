@@ -1,4 +1,3 @@
-// src/page/PortfolioPage.tsx
 import React, { useEffect, useState } from 'react';
 import Navbar from './Navbar/Navbar';
 import { RefreshCcw, FileText, BarChart3, DollarSign } from 'lucide-react';
@@ -13,6 +12,7 @@ interface Order {
   timeInForce: string;
   status: string;
   createdAt: string;
+  commission: number;
 }
 
 interface Position {
@@ -91,7 +91,6 @@ const PortfolioPage: React.FC = () => {
   const handleOrderSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setOrderMessage('');
-
     try {
       const res = await fetch(`http://localhost:8080/ach/createOrder/${accountId}`, {
         method: 'POST',
@@ -135,8 +134,6 @@ const PortfolioPage: React.FC = () => {
     <div className="h-screen flex flex-col bg-[#121212] text-gray-100">
       <Navbar />
       <main className="flex-1 overflow-auto p-6 max-w-6xl mx-auto w-full">
-
-        {/* Sección Nueva - Comprar/Vender */}
         <div className="bg-[#1E1E1E] rounded-2xl shadow p-6 mb-6 border border-gray-700">
           <h2 className="text-2xl font-bold text-white flex items-center gap-2 mb-4">
             <DollarSign className="h-5 w-5" /> Comprar o Vender Activos
@@ -229,11 +226,10 @@ const PortfolioPage: React.FC = () => {
           </form>
         </div>
 
-        {/* Órdenes */}
         <div className="bg-[#1E1E1E] rounded-2xl shadow p-6 mb-6 border border-gray-700">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-2xl font-bold text-white flex items-center gap-2">
-              <FileText className="h-5 w-5" /> Órdenes del Portafolio
+              <FileText className="h-5 w-5" /> Órdenes
             </h2>
             <button
               onClick={handleRefresh}
@@ -262,6 +258,7 @@ const PortfolioPage: React.FC = () => {
                     <th className="border-b border-gray-600 p-2 text-left text-gray-400">T. Fuerza</th>
                     <th className="border-b border-gray-600 p-2 text-left text-gray-400">Estado</th>
                     <th className="border-b border-gray-600 p-2 text-right text-gray-400">Fecha</th>
+                    <th className="border-b border-gray-600 p-2 text-right text-gray-400">Comisión</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -280,6 +277,9 @@ const PortfolioPage: React.FC = () => {
                       <td className="border-b border-gray-700 p-2 text-right">
                         {new Date(order.createdAt).toLocaleDateString()}
                       </td>
+                      <td className="border-b border-gray-700 p-2 text-right">
+                        {order.commission ? `$${order.commission.toFixed(2)}` : '-'}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -288,14 +288,12 @@ const PortfolioPage: React.FC = () => {
           )}
         </div>
 
-        {/* Posiciones */}
         <div className="bg-[#1E1E1E] rounded-2xl shadow p-6 border border-gray-700">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-2xl font-bold text-white flex items-center gap-2">
               <BarChart3 className="h-5 w-5" /> Posiciones Activas
             </h2>
           </div>
-
           {positions.length === 0 ? (
             <p className="text-gray-400">No hay posiciones activas.</p>
           ) : (
@@ -339,7 +337,7 @@ const PortfolioPage: React.FC = () => {
         </div>
       </main>
       <footer className="bg-[#1A1A1A] text-gray-400 p-4 text-sm text-center">
-        © {new Date().getFullYear()} Carol Investments. Todos los derechos reservados.
+        © 2025 Acciones El Bosque. Todos los derechos reservados. | Contacto: info@accioneselbosque.com
       </footer>
     </div>
   );

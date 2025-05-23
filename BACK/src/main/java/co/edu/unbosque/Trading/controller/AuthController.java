@@ -72,9 +72,9 @@ public class AuthController {
     }
 
     @PostMapping("/register/commission")
-    public ResponseEntity<?> registerCommission(@RequestBody Commission commission) {
+    public ResponseEntity<?> registerCommission(@RequestBody CommissionAgent commissionAgent) {
         try {
-            String message = authService.registerCommission(commission);
+            String message = authService.registerCommission(commissionAgent);
             return ResponseEntity.ok(Map.of("message", message));
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(

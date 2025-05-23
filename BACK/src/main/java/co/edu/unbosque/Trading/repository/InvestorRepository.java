@@ -8,6 +8,7 @@ import java.util.List;
 public interface InvestorRepository extends JpaRepository<Investor, Long> {
 
     List<Investor> findByCommissionId(Long commissionId);
+
     boolean existsByUsername(String username);
 
 }

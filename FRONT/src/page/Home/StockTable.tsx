@@ -28,10 +28,9 @@ const Stocktable = ({ onSelectSymbol, selectedSymbol }: StocktableProps) => {
       try {
         const response = await fetch('http://localhost:8080/alpaca/assets', {
           method: 'GET',
-          credentials: 'include', // Incluye cookies en la solicitud
+          credentials: 'include',
           headers: {
             'Content-Type': 'application/json',
-            // Puedes agregar otros headers necesarios aquí
           }
         })
 
@@ -61,7 +60,6 @@ const Stocktable = ({ onSelectSymbol, selectedSymbol }: StocktableProps) => {
     onSelectSymbol(cleanSymbol)
   }
 
-  // Función para formatear números con separadores de miles
   const formatNumber = (num: number) => {
     return num.toLocaleString('en-US', {
       minimumFractionDigits: 2,

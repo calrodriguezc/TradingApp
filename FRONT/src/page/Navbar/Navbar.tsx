@@ -5,7 +5,7 @@ import { GripHorizontalIcon } from "lucide-react";
 import Sidebar from "./Sidebar";
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";  // Asegúrate de tener este componente disponible
+import { Input } from "@/components/ui/input";
 import foto_perfil from '@/image/foto_perfil.png';
 import icono_trading from '@/image/icono_trading.png';
 import { useUser } from '@/page/Navbar/UserContext';
@@ -22,26 +22,24 @@ const Navbar = () => {
             case 'COMMISSION':
                 return 'COMISIONISTA';
             default:
-                return 'INVERSIONrISTA'; // O cualquier valor por defecto que prefieras
+                return 'INVERSIONISTA';
         }
     };
 
     const getRoleColor = () => {
         switch (role) {
             case 'ADMIN':
-                return 'bg-red-500'; // Rojo para admin
+                return 'bg-red-500';
             case 'INVESTOR':
-                return 'bg-[#16C784]'; // Verde para inversionista
+                return 'bg-[#16C784]';
             case 'COMMISSION':
-                return 'bg-blue-500'; // Azul para comisionista
+                return 'bg-blue-500';
             default:
                 return 'bg-gray-500';
         }
     };
     return (
         <div className='px-4 py-3 border-b z-50 bg-[#1E1E1E] text-white sticky top-0 left-0 right-0 flex justify-between items-center'>
-
-            {/* Menú + Título */}
             <div className='flex items-center gap-4'>
                 <Sheet>
                     <SheetTrigger asChild>
@@ -65,8 +63,6 @@ const Navbar = () => {
                 </Sheet>
                 <p className="text-base lg:text-lg font-semibold">Aplicativo Web Trading - Acciones El Bosque</p>
             </div>
-
-            {/* Búsqueda */}
             <div className='flex-1 mx-6 max-w-md'>
                 <div className="relative">
                     <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
@@ -77,8 +73,6 @@ const Navbar = () => {
                     />
                 </div>
             </div>
-
-            {/* Perfil + Rol */}
             <div className='flex items-center gap-4'>
                 <Badge className={`text-white ${getRoleColor()}`} variant="outline">
                     {getRoleName()}

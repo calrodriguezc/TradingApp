@@ -26,7 +26,6 @@ const InvestorsPage = () => {
   const [commissionId, setCommissionId] = useState<number | null>(null);
   const [selectedInvestor, setSelectedInvestor] = useState<Investor | null>(null);
 
-  // Obtener perfil del comisionista logeado
   useEffect(() => {
     fetch('http://localhost:8080/api/mi-perfil', {
       credentials: 'include',
@@ -38,7 +37,6 @@ const InvestorsPage = () => {
       .catch((err) => console.error('Error al obtener el perfil:', err));
   }, []);
 
-  // Obtener inversionistas asociados
   useEffect(() => {
     if (commissionId !== null) {
       fetch(`http://localhost:8080/investor/by-commission/${commissionId}`, {
@@ -53,9 +51,7 @@ const InvestorsPage = () => {
   return (
     <div className="h-screen flex flex-col bg-[#121212] text-gray-100">
       <Navbar />
-
       <div className="flex flex-1 overflow-hidden">
-        {/* Tabla de inversionistas */}
         <div className="w-full lg:w-1/2 border-r border-gray-700 overflow-y-auto p-4">
           <h2 className="text-xl font-semibold mb-4">Inversionistas Asociados</h2>
           <table className="min-w-full text-left text-sm border border-gray-600">
@@ -90,7 +86,6 @@ const InvestorsPage = () => {
           </table>
         </div>
 
-        {/* Panel derecho - Detalles del inversionista */}
         <div className="w-full lg:w-1/2 p-6 overflow-y-auto">
           {selectedInvestor ? (
             <div className="bg-[#1e1e1e] p-4 rounded-lg shadow-md">

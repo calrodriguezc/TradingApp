@@ -90,7 +90,6 @@ const Wallet: React.FC = () => {
         setAmount('');
         setDirection('INCOMING');
 
-        // Refresh balance and transfer list
         fetch(`http://localhost:8080/ach/account-balance/${accountId}`, {
           credentials: 'include',
         })
@@ -120,7 +119,6 @@ const Wallet: React.FC = () => {
     <div className="h-screen flex flex-col bg-[#121212] text-gray-100">
       <Navbar />
       <main className="flex-1 overflow-auto p-6 max-w-3xl mx-auto w-full">
-        {/* Billetera */}
         <div className="bg-[#1E1E1E] rounded-2xl shadow p-6 mb-6 border border-gray-700 relative">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-2xl font-bold text-white flex items-center gap-2">
@@ -141,8 +139,6 @@ const Wallet: React.FC = () => {
               ${balance.toLocaleString(undefined, { minimumFractionDigits: 2 })}
             </p>
           </div>
-
-          {/* Transferencia */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
             <select
               value={direction}
@@ -160,7 +156,6 @@ const Wallet: React.FC = () => {
               className="p-2 bg-gray-800 text-white rounded-lg"
             />
           </div>
-
           <button
             className={`px-4 py-2 rounded-lg transition ${
               hasAchRelationship
@@ -183,7 +178,6 @@ const Wallet: React.FC = () => {
           {transferError && <p className="text-red-400 mt-4">{transferError}</p>}
         </div>
 
-        {/* Historial de movimientos */}
         <div className="bg-[#1E1E1E] rounded-2xl shadow p-6 border border-gray-700 mb-6">
           <h3 className="text-xl font-bold mb-4 text-white">Historial de movimientos ACH</h3>
           {achTransfers.length === 0 ? (

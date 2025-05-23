@@ -1,6 +1,6 @@
 package co.edu.unbosque.Trading.controller;
 
-import co.edu.unbosque.Trading.model.Commission;
+import co.edu.unbosque.Trading.model.CommissionAgent;
 import co.edu.unbosque.Trading.model.Investor;
 import co.edu.unbosque.Trading.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,8 +39,8 @@ public class InvestorController {
     }
 
     @GetMapping("/commissions")
-    public ResponseEntity<List<Commission>> getCommissions() {
-        List<Commission> investors = authService.findCommissions();
+    public ResponseEntity<List<CommissionAgent>> getCommissions() {
+        List<CommissionAgent> investors = authService.findCommissions();
         return ResponseEntity.ok(investors);
     }
 

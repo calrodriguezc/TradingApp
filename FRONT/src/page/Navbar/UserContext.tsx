@@ -1,4 +1,3 @@
-// UserContext.tsx
 import { createContext, useContext, useState } from 'react';
 
 type UserRole = 'ADMIN' | 'INVESTOR' | 'COMMISSION' | '';
@@ -13,7 +12,6 @@ const UserContext = createContext<UserContextType>({
   setRole: () => {},
 });
 
-// Exporta el Provider como una exportación nombrada
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [role, setRole] = useState<UserRole>('');
 
@@ -24,8 +22,6 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-// Asegúrate de que el hook useUser sea una exportación nombrada
 export const useUser = () => useContext(UserContext);
 
-// Opcional: Exporta el contexto si lo necesitas en otros lugares
 export default UserContext;

@@ -1,10 +1,8 @@
-// src/page/ProfilePage.tsx
 import React from 'react';
 import Navbar from './Navbar/Navbar';
 import { EditIcon, RefreshCw, UserIcon } from 'lucide-react';
 
 const Profile: React.FC = () => {
-  // Datos del perfil basados en el JSON
   const profileData = {
     id: "96a66859-c3f0-42fa-b9b2-3c51750f4338",
     status: "SUBMITTED",
@@ -38,9 +36,7 @@ const Profile: React.FC = () => {
   };
 
   const handleUpdateProfile = () => {
-    // Lógica para actualizar el perfil
     alert('Redirigiendo a actualización de perfil');
-    // Aquí iría la navegación al formulario de edición
   };
 
   const formatDate = (dateString: string) => {
@@ -52,9 +48,7 @@ const Profile: React.FC = () => {
     <div className="h-screen flex flex-col bg-[#121212] text-gray-100">
       <Navbar />
       <main className="flex-1 overflow-auto p-6 max-w-3xl mx-auto w-full">
-        {/* Contenedor principal del perfil */}
         <div className="bg-[#1E1E1E] rounded-2xl shadow p-6 mb-6 border border-gray-700">
-          {/* Encabezado con título e ícono de recarga */}
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-2xl font-bold text-white flex items-center gap-2">
               <UserIcon className="h-5 w-5" /> Perfil del Usuario
@@ -67,8 +61,6 @@ const Profile: React.FC = () => {
               <RefreshCw className="h-5 w-5" />
             </button>
           </div>
-
-          {/* Sección de información personal */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <div className="bg-[#2A2A2A] p-4 rounded-lg">
               <h3 className="text-lg font-semibold mb-3 text-blue-400">Información Personal</h3>
@@ -90,8 +82,6 @@ const Profile: React.FC = () => {
               </div>
             </div>
           </div>
-
-          {/* Sección de información de la cuenta */}
           <div className="bg-[#2A2A2A] p-4 rounded-lg mb-6">
             <h3 className="text-lg font-semibold mb-3 text-blue-400">Información de la Cuenta</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -108,7 +98,6 @@ const Profile: React.FC = () => {
             </div>
           </div>
 
-          {/* Botones de acción */}
           <div className="flex flex-wrap gap-4 justify-center md:justify-end">
             <button
               onClick={handleUpdateProfile}
@@ -126,7 +115,6 @@ const Profile: React.FC = () => {
         </div>
       </main>
 
-      {/* Footer */}
       <footer className="bg-[#1A1A1A] text-gray-400 p-4 text-sm text-center border-t border-gray-700">
         © 2025 Acciones El Bosque. Todos los derechos reservados. | Contacto: info@accioneselbosque.com
       </footer>

@@ -12,10 +12,15 @@ import lombok.NoArgsConstructor;
 public class BarDTO {
 
     private String t; // timestamp
+
     private double o; // open
+
     private double h; // high
+
     private double l; // low
+
     private double c; // close
+
     private long v;   // volume
 
 }

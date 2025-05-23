@@ -21,13 +21,19 @@ public class Transfer {
 
     @Id
     private String id;
+
     @JsonProperty("relationship_id")
     private String relationshipId;
+
     @JsonProperty("account_id")
     private String accountId;
+
     private String status;
+
     private String amount;
+
     private String direction;
+
     @JsonProperty("created_at")
     private String createdAt;
 

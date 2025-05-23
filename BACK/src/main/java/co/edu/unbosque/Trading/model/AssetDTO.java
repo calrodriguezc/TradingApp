@@ -12,11 +12,17 @@ import lombok.NoArgsConstructor;
 public class AssetDTO {
 
     private String symbol;
+
     private String name;
+
     private String exchange;
+
     private double lastPrice;
+
     private double change;
+
     private double changePercent;
+
     private long volume;
 
 }

@@ -42,7 +42,7 @@ public class MarketDataService {
 
         List<String> symbols = new ArrayList<>();
         Map<String, AssetDTO> assetInfoMap = new HashMap<>();
-        int maxAssets = 25;
+        int maxAssets = 100;
         int count = 0;
 
         for (JsonNode asset : assetsArray) {
@@ -62,7 +62,11 @@ public class MarketDataService {
             }
         }
 
-        // Construir el parámetro de símbolos para el snapshot
+        if (symbols.isEmpty()) {
+            System.out.println("No active and tradable assets found.");
+            return new ArrayList<>();
+        }
+
         String symbolsParam = String.join(",", symbols);
         String snapshotsUrl = "https://data.alpaca.markets/v2/stocks/snapshots?symbols=" + symbolsParam;
 
@@ -103,8 +107,6 @@ public class MarketDataService {
 
         return new ArrayList<>(assetInfoMap.values());
     }
-
-
 
     public List<BarDTO> fetchBarsForSymbol(String symbol) throws Exception {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");

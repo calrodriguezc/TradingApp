@@ -4,7 +4,6 @@ import co.edu.unbosque.Trading.model.Transfer;
 import co.edu.unbosque.Trading.model.TransferDTO;
 import co.edu.unbosque.Trading.service.TransferService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

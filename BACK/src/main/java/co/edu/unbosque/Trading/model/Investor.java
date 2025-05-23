@@ -16,6 +16,6 @@ public class Investor extends User {
 
     @ManyToOne
     @JoinColumn(name = "commission_id")
-    private Commission commission;
+    private CommissionAgent commissionAgent;
 
 }

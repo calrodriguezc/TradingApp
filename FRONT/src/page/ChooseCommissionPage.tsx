@@ -17,7 +17,6 @@ const ChooseCommissionPage = () => {
   const [message, setMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    // Obtener perfil para obtener el ID del inversionista
     fetch('http://localhost:8080/api/mi-perfil', {
       credentials: 'include',
     })
@@ -57,9 +56,7 @@ const ChooseCommissionPage = () => {
   return (
     <div className="h-screen flex flex-col bg-[#121212] text-gray-100">
       <Navbar />
-
       <div className="flex flex-1 overflow-hidden">
-        {/* Tabla de comisionistas */}
         <div className="w-full lg:w-1/2 border-r border-gray-700 overflow-y-auto p-4">
           <h2 className="text-xl font-semibold mb-4">Comisionistas Disponibles</h2>
           <table className="min-w-full text-left text-sm border border-gray-600">
@@ -77,7 +74,7 @@ const ChooseCommissionPage = () => {
                   className="hover:bg-gray-800 cursor-pointer"
                   onClick={() => {
                     setSelectedCommission(c);
-                    setMessage(null); // Limpiar mensaje anterior
+                    setMessage(null);
                   }}
                 >
                   <td className="px-4 py-2 border-b border-gray-700 text-blue-400 underline">
@@ -90,8 +87,6 @@ const ChooseCommissionPage = () => {
             </tbody>
           </table>
         </div>
-
-        {/* Panel derecho - Detalles del comisionista */}
         <div className="w-full lg:w-1/2 p-6 overflow-y-auto">
           {selectedCommission ? (
             <div className="bg-[#1e1e1e] p-4 rounded-lg shadow-md">

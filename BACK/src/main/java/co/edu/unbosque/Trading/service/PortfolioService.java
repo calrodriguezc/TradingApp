@@ -1,7 +1,7 @@
 package co.edu.unbosque.Trading.service;
 
 import co.edu.unbosque.Trading.model.*;
-import co.edu.unbosque.Trading.repository.AchRelationshipRepository;
+import co.edu.unbosque.Trading.repository.PortfolioRepository;
 import co.edu.unbosque.Trading.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -16,17 +16,17 @@ import java.util.Collections;
 import java.util.List;
 
 @Service
-public class AchRelationshipService {
+public class PortfolioService {
 
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
-    private final AchRelationshipRepository achRelationshipRepository;
+    private final PortfolioRepository portfolioRepository;
     private final UserRepository userRepository;
 
-    public AchRelationshipService(AchRelationshipRepository achRelationshioRepository, UserRepository userRepository) {
+    public PortfolioService(PortfolioRepository achRelationshioRepository, UserRepository userRepository) {
         this.restTemplate = new RestTemplate();
         this.objectMapper = new ObjectMapper();
-        this.achRelationshipRepository = achRelationshioRepository;
+        this.portfolioRepository = achRelationshioRepository;
         this.userRepository = userRepository;
     }
 
@@ -61,7 +61,6 @@ public class AchRelationshipService {
         }
     }
 
-
     public List<OrdersDTO> getOrders(String accountId) throws Exception {
         String url = "https://broker-api.sandbox.alpaca.markets/v1/trading/accounts/" + accountId + "/orders";
 
@@ -77,10 +76,7 @@ public class AchRelationshipService {
             );
 
             JsonNode root = objectMapper.readTree(response.getBody());
-            // 👉 Imprime código de estado
             System.out.println("Status Code: " + response.getStatusCode());
-
-// 👉 Imprime cuerpo completo de la respuesta
             System.out.println("Response Body: " + response.getBody());
             List<OrdersDTO> orders = new ArrayList<>();
 
@@ -107,7 +103,6 @@ public class AchRelationshipService {
             throw new Exception("Failed to fetch orders", e);
         }
     }
-
 
     public List<PositionDTO> getPortfolio(String accountId) throws Exception {
         String url = "https://broker-api.sandbox.alpaca.markets/v1/trading/accounts/" + accountId + "/positions";
@@ -150,6 +145,28 @@ public class AchRelationshipService {
     }
 
     public void createOrder(String accountId, OrderDTO request) throws Exception {
+        final double COMMISSION_RATE = 0.02;
+
+        if (request.getNotional() != null) {
+            double originalNotional = request.getNotional();
+            double commission = originalNotional * COMMISSION_RATE;
+            double adjustedNotional = originalNotional - commission;
+            if (adjustedNotional <= 0) {
+                throw new IllegalArgumentException("El valor después de aplicar la comisión es inválido.");
+            }
+            request.setNotional(adjustedNotional);
+        }
+
+        if (request.getQty() != null && request.getPrice() != null) {
+            double totalCost = request.getQty() * request.getPrice();
+            double commission = totalCost * COMMISSION_RATE;
+            double adjustedQty = Math.floor((totalCost - commission) / request.getPrice());
+            if (adjustedQty <= 0) {
+                throw new IllegalArgumentException("La cantidad después de aplicar la comisión es inválida.");
+            }
+            request.setQty((int) adjustedQty);
+        }
+
         String url = "https://broker-api.sandbox.alpaca.markets/v1/trading/accounts/" + accountId + "/orders";
 
         HttpHeaders headers = createHeadersWithBasicAuth();
@@ -162,20 +179,6 @@ public class AchRelationshipService {
             throw new Exception("Failed to create order: " + e.getMessage(), e);
         }
     }
-
-//    public void depositFunds(String accountId, TransferDTO request) throws Exception {
-//        String url = "https://broker-api.sandbox.alpaca.markets/v1/accounts/" + accountId + "/transfers";
-//
-//        HttpHeaders headers = createHeadersWithBasicAuth();
-//        HttpEntity<TransferDTO> entity = new HttpEntity<>(request, headers);
-//
-//        try {
-//            restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
-//        } catch (HttpClientErrorException | HttpServerErrorException e) {
-//            System.err.println("Alpaca Transfer Error: " + e.getStatusCode() + " - " + e.getResponseBodyAsString());
-//            throw new Exception("Falló el depósito: " + e.getMessage(), e);
-//        }
-//    }
 
     public String createAchRelationship(String accountId, AchRelationshipDTO request, User user) throws Exception {
             String url = "https://broker-api.sandbox.alpaca.markets/v1/accounts/" + accountId + "/ach_relationships";
@@ -203,7 +206,7 @@ public class AchRelationshipService {
                 achRelationship.setAchRelationshipId(achRelationshipId);
                 achRelationship.setUser(user);
                 user.setAchRelationship(achRelationship);
-                achRelationshipRepository.save(achRelationship);
+                portfolioRepository.save(achRelationship);
                 userRepository.save(user);
                 return achRelationshipId;
             } else {

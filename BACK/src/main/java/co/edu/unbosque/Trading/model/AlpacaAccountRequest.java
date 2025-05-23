@@ -23,8 +23,6 @@ public class AlpacaAccountRequest {
         private String phone_number;
         private List<String> street_address;
         private String city;
-
-        // Getters y Setters
     }
 
     @Data
@@ -39,8 +37,6 @@ public class AlpacaAccountRequest {
         private String country_of_tax_residence;
         private List<String> funding_source;
         private String tax_id;
-
-        // Getters y Setters
     }
 
     @Data
@@ -56,8 +52,6 @@ public class AlpacaAccountRequest {
         private boolean is_politically_exposed;
         @JsonProperty("immediate_family_exposed")
         private boolean immediate_family_exposed;
-
-        // Getters y Setters
     }
 
     @Data
@@ -68,8 +62,6 @@ public class AlpacaAccountRequest {
         private String agreement;
         private String signed_at;
         private String ip_address;
-
-        // Getters y Setters
     }
 
     private Contact contact;

@@ -6,6 +6,7 @@ import lombok.Data;
 public class AccountBalanceDTO {
 
     private String cash;
+
     private String last_equity;
 
 }

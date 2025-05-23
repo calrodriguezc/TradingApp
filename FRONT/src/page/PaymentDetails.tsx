@@ -21,7 +21,6 @@ const PaymentDetails: React.FC = () => {
   const [error, setError] = useState('');
   const [inputsDisabled, setInputsDisabled] = useState(false);
 
-  // Obtener datos del usuario al cargar el componente
   useEffect(() => {
     const fetchPaymentDetails = async () => {
       try {
@@ -40,7 +39,6 @@ const PaymentDetails: React.FC = () => {
         setBankAccountNumber(data.bankAccountNumber || '');
         setBankRoutingNumber(data.bankRoutingNumber || '');
 
-        // Desactivar inputs si ya existe relación ACH
         if (data.achId || data.bankAccountNumber || data.bankRoutingNumber) {
           setInputsDisabled(true);
           setSuccessMessage('Cuenta bancaria ya asociada.');
@@ -147,7 +145,6 @@ const PaymentDetails: React.FC = () => {
   return (
     <div className="h-screen flex flex-col bg-[#121212] text-gray-100">
       <Navbar />
-
       <main className="flex-1 overflow-auto p-6 max-w-xl mx-auto w-full">
         <div className="bg-[#1E1E1E] rounded-2xl shadow p-6 border border-gray-700">
           <h2 className="text-2xl font-bold mb-6 text-white text-center">

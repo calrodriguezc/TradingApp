@@ -34,7 +34,6 @@ const LoginRegister = () => {
         backgroundRepeat: 'no-repeat',
     };
 
-    // Validation functions
     const validateName = (name: string) => {
         return /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(name)
     }
@@ -110,7 +109,6 @@ const LoginRegister = () => {
             });
 
             if (response.ok) {
-                // Llamada adicional para obtener el perfil
                 const perfilRes = await fetch('http://localhost:8080/api/mi-perfil', {
                     method: 'GET',
                     credentials: 'include',
@@ -150,8 +148,6 @@ const LoginRegister = () => {
             toast.error('Por favor corrija los errores en el formulario');
             return;
         }
-
-        // Elegir el endpoint según el rol
         let registerUrl = '';
         switch (registerData.role) {
             case 'INVESTOR':
@@ -186,7 +182,6 @@ const LoginRegister = () => {
             toast.success('Usuario registrado correctamente');
             setActiveTab('login');
 
-            // Limpiar formulario
             setRegisterData({
                 username: '', password: '', role: '', name: '', lastName: '',
                 cedula: '', email: '', phoneNumber: ''
@@ -214,8 +209,6 @@ const LoginRegister = () => {
                         <TabsTrigger className="data-[state=active]:bg-[#16C784] data-[state=active]:text-white" value="login">Iniciar sesión</TabsTrigger>
                         <TabsTrigger className="data-[state=active]:bg-[#16C784] data-[state=active]:text-white" value="register">Registrarse</TabsTrigger>
                     </TabsList>
-
-                    {/* LOGIN */}
                     <TabsContent value="login">
                         <Card>
                             <CardHeader className="text-center">
@@ -258,8 +251,6 @@ const LoginRegister = () => {
                             </CardFooter>
                         </Card>
                     </TabsContent>
-
-                    {/* REGISTER */}
                     <TabsContent value="register">
                         <Card>
                             <CardHeader className="text-center">
@@ -321,7 +312,6 @@ const LoginRegister = () => {
                                             value={registerData[id as keyof typeof registerData]}
                                             onChange={(e) => {
                                                 setRegisterData({ ...registerData, [id]: e.target.value })
-                                                // Clear error when typing
                                                 if (error) {
                                                     setRegisterErrors({ ...registerErrors, [id]: '' })
                                                 }

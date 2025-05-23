@@ -1,15 +1,11 @@
 package co.edu.unbosque.Trading.repository;
 
-import co.edu.unbosque.Trading.model.User;
+import co.edu.unbosque.Trading.model.CommissionAgent;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
-
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
-
-    Optional<User> findByUsername(String username);
+public interface CommissionAgentRepository extends JpaRepository<CommissionAgent, Long> {
 
     boolean existsByUsername(String username);
 
